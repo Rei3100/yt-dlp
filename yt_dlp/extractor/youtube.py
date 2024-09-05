@@ -502,12 +502,7 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
     # XXX: These are the supported YouTube UI and API languages,
     # which is slightly different from languages supported for translation in YouTube studio
     _SUPPORTED_LANG_CODES = [
-        'af', 'az', 'id', 'ms', 'bs', 'ca', 'cs', 'da', 'de', 'et', 'en-IN', 'en-GB', 'en', 'es',
-        'es-419', 'es-US', 'eu', 'fil', 'fr', 'fr-CA', 'gl', 'hr', 'zu', 'is', 'it', 'sw', 'lv',
-        'lt', 'hu', 'nl', 'no', 'uz', 'pl', 'pt-PT', 'pt', 'ro', 'sq', 'sk', 'sl', 'sr-Latn', 'fi',
-        'sv', 'vi', 'tr', 'be', 'bg', 'ky', 'kk', 'mk', 'mn', 'ru', 'sr', 'uk', 'el', 'hy', 'iw',
-        'ur', 'ar', 'fa', 'ne', 'mr', 'hi', 'as', 'bn', 'pa', 'gu', 'or', 'ta', 'te', 'kn', 'ml',
-        'si', 'th', 'lo', 'my', 'ka', 'am', 'km', 'zh-CN', 'zh-TW', 'zh-HK', 'ja', 'ko',
+        'ja',
     ]
 
     _IGNORED_WARNINGS = {
@@ -545,7 +540,7 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
             raise ExtractorError(
                 f'Unsupported language code: {preferred_lang}. Supported language codes (case-sensitive): {join_nonempty(*self._SUPPORTED_LANG_CODES, delim=", ")}.',
                 expected=True)
-        elif preferred_lang != 'en':
+        elif preferred_lang != 'ja':
             self.report_warning(
                 f'Preferring "{preferred_lang}" translated fields. Note that some metadata extraction may fail or be incorrect.')
         return preferred_lang
@@ -568,7 +563,7 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
                 pref = dict(urllib.parse.parse_qsl(pref_cookie.value))
             except ValueError:
                 self.report_warning('Failed to parse user PREF cookie' + bug_reports_message())
-        pref.update({'hl': self._preferred_lang or 'en', 'tz': 'UTC'})
+        pref.update({'hl': self._preferred_lang or 'ja', 'tz': 'UTC'})
         self._set_cookie('.youtube.com', name='PREF', value=urllib.parse.urlencode(pref))
 
     def _real_initialize(self):
@@ -613,7 +608,7 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
             (ytcfg, self._get_default_ytcfg(default_client)), 'INNERTUBE_CONTEXT', expected_type=dict)
         # Enforce language and tz for extraction
         client_context = traverse_obj(context, 'client', expected_type=dict, default={})
-        client_context.update({'hl': self._preferred_lang or 'en', 'timeZone': 'UTC', 'utcOffsetMinutes': 0})
+        client_context.update({'hl': self._preferred_lang or 'ja', 'timeZone': 'UTC', 'utcOffsetMinutes': 0})
         return context
 
     _SAPISID = None
@@ -1339,7 +1334,6 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
         short_client_name(client): client
         for client in ('android', 'android_creator', 'android_music')
     }
-    _DEFAULT_CLIENTS = ('ios', 'web_creator')
 
     _GEO_BYPASS = False
 
@@ -3745,19 +3739,17 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
     def _get_requested_clients(self, url, smuggled_data):
         requested_clients = []
         broken_clients = []
-        excluded_clients = []
+        default = ['ios', 'web_creator']
         allowed_clients = sorted(
             (client for client in INNERTUBE_CLIENTS if client[:1] != '_'),
             key=lambda client: INNERTUBE_CLIENTS[client]['priority'], reverse=True)
         for client in self._configuration_arg('player_client'):
             if client == 'default':
-                requested_clients.extend(self._DEFAULT_CLIENTS)
+                requested_clients.extend(default)
             elif client == 'all':
                 requested_clients.extend(allowed_clients)
-            elif client.startswith('-'):
-                excluded_clients.append(client[1:])
             elif client not in allowed_clients:
-                self.report_warning(f'Skipping unsupported client "{client}"')
+                self.report_warning(f'Skipping unsupported client {client}')
             elif client in self._BROKEN_CLIENTS.values():
                 broken_clients.append(client)
             else:
@@ -3765,12 +3757,7 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
         # Force deprioritization of _BROKEN_CLIENTS for format de-duplication
         requested_clients.extend(broken_clients)
         if not requested_clients:
-            requested_clients.extend(self._DEFAULT_CLIENTS)
-        for excluded_client in excluded_clients:
-            if excluded_client in requested_clients:
-                requested_clients.remove(excluded_client)
-        if not requested_clients:
-            raise ExtractorError('No player clients have been requested', expected=True)
+            requested_clients = default
 
         if smuggled_data.get('is_music_url') or self.is_music_url(url):
             for requested_client in requested_clients:
@@ -4261,6 +4248,9 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
         webpage_url = base_url + 'watch?v=' + video_id
 
         webpage, master_ytcfg, player_responses, player_url = self._download_player_responses(url, smuggled_data, video_id, webpage_url)
+        # langが反映されないリクエストを先に投げているので、順序を逆にして日本語の情報を取得している
+        # todo: 最初の方のリクエストを修正する。
+        player_responses.reverse()
 
         playability_statuses = traverse_obj(
             player_responses, (..., 'playabilityStatus'), expected_type=dict)
@@ -4281,10 +4271,8 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             player_responses, (..., 'microformat', 'playerMicroformatRenderer'),
             expected_type=dict)
 
-        translated_title = self._get_text(microformats, (..., 'title'))
-        video_title = (self._preferred_lang and translated_title
-                       or get_first(video_details, 'title')  # primary
-                       or translated_title
+        video_title = (video_details[0]['title']  # primary
+                       or get_first(video_details, 'title')
                        or search_meta(['og:title', 'twitter:title', 'title']))
         translated_description = self._get_text(microformats, (..., 'description'))
         original_description = get_first(video_details, 'shortDescription')
