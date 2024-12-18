@@ -82,7 +82,7 @@ class HTTPHeaderDict(collections.UserDict, dict):
 std_headers = HTTPHeaderDict({
     'User-Agent': random_user_agent(),
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Language': 'en-us,en;q=0.5',
+    'Accept-Language': 'ja-JP',
     'Sec-Fetch-Mode': 'navigate',
 })
 
