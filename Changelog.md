@@ -4,6 +4,28 @@
 # To create a release, dispatch the https://github.com/yt-dlp/yt-dlp/actions/workflows/release.yml workflow on master
 -->
 
+### 2024.12.24.000348
+
+#### Core changes
+- ["pillow>=11.0.0",](https://github.com/yt-dlp/yt-dlp/commit/709659535f6e0bf6c233d79e141f4bcf617e3140) by [pukkandan](https://github.com/pukkandan)
+- [# 'Accept-Language': 'en-us,en;q=0.5',](https://github.com/yt-dlp/yt-dlp/commit/9a38c18a080313df0a86f0e7cd3f3d8e13b36ed7) by [pukkandan](https://github.com/pukkandan)
+- [# サムネイルを正方形に切り出してwebpで保存する.](https://github.com/yt-dlp/yt-dlp/commit/c6dedd0cc4c6e0ba23e865388eed95ee9d434477) by [pukkandan](https://github.com/pukkandan)
+- ['Accept-Language': 'ja-JP',](https://github.com/yt-dlp/yt-dlp/commit/fa755fbb78c76aea2a70ca5537ab11247794ab05) by [pukkandan](https://github.com/pukkandan)
+- ['ja'](https://github.com/yt-dlp/yt-dlp/commit/16b80371a7c1e7dee34f8d3d3ed4f2ae787fe4e4) by [pukkandan](https://github.com/pukkandan)
+- ['ja',](https://github.com/yt-dlp/yt-dlp/commit/aba251f0369dc2657e8b79c839408064fa5821d3) by [pukkandan](https://github.com/pukkandan)
+- [quality=40](https://github.com/yt-dlp/yt-dlp/commit/981a5783fb850781b1401ba566ee57f86d4a5638) by [pukkandan](https://github.com/pukkandan)
+- [quality=70](https://github.com/yt-dlp/yt-dlp/commit/dbaa86355785f6bb03ec4b07856a3e04359af4ab) by [pukkandan](https://github.com/pukkandan)
+- [日本語のタイトル](https://github.com/yt-dlp/yt-dlp/commit/f17e145520c95c6fdb76795eb17d6217c83c3f9b) by [pukkandan](https://github.com/pukkandan)
+- **update**
+    - [Check 64-bitness when upgrading ARM builds](https://github.com/yt-dlp/yt-dlp/commit/b91c3925c2059970daa801cb131c0c2f4f302e72) ([#11819](https://github.com/yt-dlp/yt-dlp/issues/11819)) by [bashonly](https://github.com/bashonly)
+    - [Fix endless update loop for `linux_exe` builds](https://github.com/yt-dlp/yt-dlp/commit/3d3ee458c1fe49dd5ebd7651a092119d23eb7000) ([#11827](https://github.com/yt-dlp/yt-dlp/issues/11827)) by [bashonly](https://github.com/bashonly)
+
+#### Extractor changes
+- **soundcloud**: [Various fixes](https://github.com/yt-dlp/yt-dlp/commit/d298693b1b266d198e8eeecb90ea17c4a031268f) ([#11820](https://github.com/yt-dlp/yt-dlp/issues/11820)) by [bashonly](https://github.com/bashonly)
+- **youtube**
+    - [Add age-gate workaround for some embeddable videos](https://github.com/yt-dlp/yt-dlp/commit/09a6c687126f04e243fcb105a828787efddd1030) ([#11821](https://github.com/yt-dlp/yt-dlp/issues/11821)) by [bashonly](https://github.com/bashonly)
+    - [Fix `uploader_id` extraction](https://github.com/yt-dlp/yt-dlp/commit/1a8851b689763e5173b96f70f8a71df0e4a44b66) ([#11818](https://github.com/yt-dlp/yt-dlp/issues/11818)) by [bashonly](https://github.com/bashonly)
+
 ### 2024.12.13
 
 #### Extractor changes
