@@ -81,7 +81,7 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
         from PIL import Image
         img = Image.open(thumbnail_filename)
         w, h = img.size
-        if w != h or thumbnail_ext.lower() not in ('webp',):
+        if w != h or thumbnail_ext.lower() not in ('jpg', 'jpeg'):
             if w > h:
                 x = (w - h) // 2
                 img = img.crop((x, 0, x+h, h))
@@ -91,7 +91,7 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
             name = os.path.splitext(thumbnail_filename)[0]
             thumbnail_filename = name + "_cropped.jpg"
             thumbnail_ext = 'jpg'
-            img.save(thumbnail_filename, quality=10, optimize=True, compress_level=9)
+            img.save(thumbnail_filename, quality=5, optimize=True)
 
         mtime = os.stat(filename).st_mtime
 
