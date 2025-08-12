@@ -91,7 +91,7 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
             name = os.path.splitext(thumbnail_filename)[0]
             thumbnail_filename = name + "_cropped.webp"
             thumbnail_ext = 'webp'
-            img.save(thumbnail_filename, quality=3, method=6)
+            img.save(thumbnail_filename, quality=5, method=6)
 
         mtime = os.stat(filename).st_mtime
 
