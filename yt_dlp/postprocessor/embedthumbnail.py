@@ -77,11 +77,11 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
 
         original_thumbnail = thumbnail_filename = info['thumbnails'][idx]['filepath']
 
-        # サムネイルを正方形に切り出してjpgで保存する.
+        # サムネイルを正方形に切り出してwebpで保存する.
         from PIL import Image
         img = Image.open(thumbnail_filename)
         w, h = img.size
-        if w != h or thumbnail_ext.lower() not in ('jpg', 'jpeg'):
+        if w != h or thumbnail_ext.lower() not in ('webp', 'webp'):
             if (w, h) == (1280, 720):
                 x = (w - h) // 2
                 img = img.crop((x, 0, x + h, h))  # 720x720
@@ -94,9 +94,9 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
                 y = (h - w) // 2
                 img = img.crop((0, y, w, y+w))
             name = os.path.splitext(thumbnail_filename)[0]
-            thumbnail_filename = name + "_cropped.jpg"
-            thumbnail_ext = 'jpg'
-            img.save(thumbnail_filename, quality=20, optimize=True, progressive=True, subsampling=2)
+            thumbnail_filename = name + "_cropped.webp"
+            thumbnail_ext = 'webp'
+            img.save(thumbnail_filename, quality=15, method=6, lossless=False)
 
         mtime = os.stat(filename).st_mtime
 
