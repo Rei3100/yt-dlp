@@ -86,7 +86,7 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
                 x = (w - h) // 2
                 img = img.crop((x, 0, x + h, h))  # 720x720
             elif (w, h) == (640, 480):
-                img = img.crop((180, 0, 540, 480))  # 360x480
+                img = img.crop((140, 60, 500, 420))  # 360x360
             elif w > h:
                 x = (w - h) // 2
                 img = img.crop((x, 0, x+h, h))
