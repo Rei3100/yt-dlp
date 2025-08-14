@@ -77,21 +77,31 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
 
         original_thumbnail = thumbnail_filename = info['thumbnails'][idx]['filepath']
 
-        # サムネイルを正方形に切り出してjpgで保存する.
-        from PIL import Image
-        img = Image.open(thumbnail_filename)
-        w, h = img.size
-        if w != h or thumbnail_ext.lower() not in ('jpg', 'jpeg'):
-            if w > h:
-                x = (w - h) // 2
-                img = img.crop((x, 0, x+h, h))
-            elif h > w:
-                y = (h - w) // 2
-                img = img.crop((0, y, w, y+w))
-            name = os.path.splitext(thumbnail_filename)[0]
-            thumbnail_filename = name + "_cropped.jpg"
-            thumbnail_ext = 'jpg'
-            img.save(thumbnail_filename, quality=5, optimize=True)
+# サムネイルを正方形に切り出してjpgで保存する.
+from PIL import Image
+import os
+
+img = Image.open(thumbnail_filename)
+w, h = img.size
+
+# 幅と高さが異なる場合のみ処理
+if w != h or thumbnail_ext.lower() not in ('jpg', 'jpeg'):
+    if w > h:
+        # 幅が大きい場合、中央寄せで高さに合わせてトリミング
+        x = (w - h) // 2
+        img = img.crop((x, 0, x + h, h))
+    elif h > w:
+        # 高さが大きい場合（ほぼないが保険）
+        y = (h - w) // 2
+        img = img.crop((0, y, w, y + w))
+
+    # 保存ファイル名変更
+    name = os.path.splitext(thumbnail_filename)[0]
+    thumbnail_filename = name + "_cropped.jpg"
+    thumbnail_ext = 'jpg'
+
+    # 品質を高めて保存（必要に応じて変更可能）
+    img.save(thumbnail_filename, quality=5, optimize=True)
 
         mtime = os.stat(filename).st_mtime
 
