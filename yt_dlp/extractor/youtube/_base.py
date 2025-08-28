@@ -310,6 +310,8 @@ INNERTUBE_CLIENTS = {
         },
         'INNERTUBE_CONTEXT_CLIENT_NAME': 7,
         'SUPPORTS_COOKIES': True,
+        # See: https://github.com/youtube/cobalt/blob/main/cobalt/browser/user_agent/user_agent_platform_info.cc#L506
+        'AUTHENTICATED_USER_AGENT': 'Mozilla/5.0 (ChromiumStylePlatform) Cobalt/25.lts.30.1034943-gold (unlike Gecko), Unknown_TV_Unknown_0/Unknown (Unknown, Unknown)',
     },
     'tv_simply': {
         'INNERTUBE_CONTEXT': {
@@ -368,7 +370,8 @@ def build_innertube_clients():
         ytcfg.setdefault('REQUIRE_AUTH', False)
         ytcfg.setdefault('SUPPORTS_COOKIES', False)
         ytcfg.setdefault('PLAYER_PARAMS', None)
-        ytcfg['INNERTUBE_CONTEXT']['client'].setdefault('hl', 'ja')
+        ytcfg.setdefault('AUTHENTICATED_USER_AGENT', None)
+        ytcfg['INNERTUBE_CONTEXT']['client'].setdefault('hl', 'en')
 
         _, base_client, variant = _split_innertube_client(client)
         ytcfg['priority'] = 10 * priority(base_client)
@@ -549,7 +552,12 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
     # XXX: These are the supported YouTube UI and API languages,
     # which is slightly different from languages supported for translation in YouTube studio
     _SUPPORTED_LANG_CODES = [
-        'ja',
+        'af', 'az', 'id', 'ms', 'bs', 'ca', 'cs', 'da', 'de', 'et', 'en-IN', 'en-GB', 'en', 'es',
+        'es-419', 'es-US', 'eu', 'fil', 'fr', 'fr-CA', 'gl', 'hr', 'zu', 'is', 'it', 'sw', 'lv',
+        'lt', 'hu', 'nl', 'no', 'uz', 'pl', 'pt-PT', 'pt', 'ro', 'sq', 'sk', 'sl', 'sr-Latn', 'fi',
+        'sv', 'vi', 'tr', 'be', 'bg', 'ky', 'kk', 'mk', 'mn', 'ru', 'sr', 'uk', 'el', 'hy', 'iw',
+        'ur', 'ar', 'fa', 'ne', 'mr', 'hi', 'as', 'bn', 'pa', 'gu', 'or', 'ta', 'te', 'kn', 'ml',
+        'si', 'th', 'lo', 'my', 'ka', 'am', 'km', 'zh-CN', 'zh-TW', 'zh-HK', 'ja', 'ko',
     ]
 
     _IGNORED_WARNINGS = {
@@ -592,7 +600,7 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
             raise ExtractorError(
                 f'Unsupported language code: {preferred_lang}. Supported language codes (case-sensitive): {join_nonempty(*self._SUPPORTED_LANG_CODES, delim=", ")}.',
                 expected=True)
-        elif preferred_lang != 'ja':
+        elif preferred_lang != 'en':
             self.report_warning(
                 f'Preferring "{preferred_lang}" translated fields. Note that some metadata extraction may fail or be incorrect.')
         return preferred_lang
@@ -613,7 +621,7 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
                 pref = dict(urllib.parse.parse_qsl(pref_cookie.value))
             except ValueError:
                 self.report_warning('Failed to parse user PREF cookie' + bug_reports_message())
-        pref.update({'hl': self._preferred_lang or 'ja', 'tz': 'UTC'})
+        pref.update({'hl': self._preferred_lang or 'en', 'tz': 'UTC'})
         self._set_cookie('.youtube.com', name='PREF', value=urllib.parse.urlencode(pref))
 
     def _initialize_cookie_auth(self):
@@ -650,7 +658,14 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
     _YT_INITIAL_PLAYER_RESPONSE_RE = r'ytInitialPlayerResponse\s*='
 
     def _get_default_ytcfg(self, client='web'):
-        return copy.deepcopy(INNERTUBE_CLIENTS[client])
+        ytcfg = copy.deepcopy(INNERTUBE_CLIENTS[client])
+
+        # Currently, only the tv client needs to use an alternative user-agent when logged-in
+        if ytcfg.get('AUTHENTICATED_USER_AGENT') and self.is_authenticated:
+            client_context = ytcfg.setdefault('INNERTUBE_CONTEXT', {}).setdefault('client', {})
+            client_context['userAgent'] = ytcfg['AUTHENTICATED_USER_AGENT']
+
+        return ytcfg
 
     def _get_innertube_host(self, client='web'):
         return INNERTUBE_CLIENTS[client]['INNERTUBE_HOST']
@@ -679,7 +694,7 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
             (ytcfg, self._get_default_ytcfg(default_client)), 'INNERTUBE_CONTEXT', expected_type=dict)
         # Enforce language and tz for extraction
         client_context = traverse_obj(context, 'client', expected_type=dict, default={})
-        client_context.update({'hl': self._preferred_lang or 'ja', 'timeZone': 'UTC', 'utcOffsetMinutes': 0})
+        client_context.update({'hl': self._preferred_lang or 'en', 'timeZone': 'UTC', 'utcOffsetMinutes': 0})
         return context
 
     @staticmethod
@@ -949,7 +964,8 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
         ytcfg = self.extract_ytcfg(video_id, webpage) or {}
 
         # Workaround for https://github.com/yt-dlp/yt-dlp/issues/12563
-        if client == 'tv':
+        # But it's not effective when logged-in
+        if client == 'tv' and not self.is_authenticated:
             config_info = traverse_obj(ytcfg, (
                 'INNERTUBE_CONTEXT', 'client', 'configInfo', {dict})) or {}
             config_info.pop('appInstallData', None)
@@ -1181,7 +1197,7 @@ class YoutubeBaseInfoExtractor(InfoExtractor):
                         (r'([a-z]+\s*\d{1,2},?\s*20\d{2})', r'(?:.+|^)(?:live|premieres|ed|ing)(?:\s*(?:on|for))?\s*(.+\d)'),
                         text.lower(), 'time text', default=None)))
 
-        if text and timestamp is None and self._preferred_lang in (None, 'ja'):
+        if text and timestamp is None and self._preferred_lang in (None, 'en'):
             self.report_warning(
                 f'Cannot parse localized time text "{text}"', only_once=True)
         return timestamp
