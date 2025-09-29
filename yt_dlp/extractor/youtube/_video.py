@@ -3908,10 +3908,10 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
 
         original_description = get_first(video_details, 'shortDescription')
         video_description = (
-            (video_details[0]['description')
+            (video_details[0]['shortDescription']  # primary
             # If original description is blank, it will be an empty string.
             # Do not prefer translated description in this case.
-            or original_description if original_description)
+            or original_description if original_description))
         if video_description is None:
             video_description = initial_description
 
