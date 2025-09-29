@@ -3897,23 +3897,20 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
             self._get_text(initial_vdhr, 'title')
             or self._get_text(initial_video_details_renderer, 'title'))
 
-        translated_title = self._get_text(microformats, (..., 'title'))
-        video_title = ((self._preferred_lang and translated_title)
-                       or get_first(video_details, 'title')  # primary
-                       or translated_title
+        video_title = (video_details[0]['title']  # primary
+                       or get_first(video_details, 'title')
                        or search_meta(['og:title', 'twitter:title', 'title']))
         if not video_title and initial_title:
             self.report_warning(
                 'No title found in player responses; falling back to title from initial data. '
                 'Other metadata may also be missing')
             video_title = initial_title
-        translated_description = self._get_text(microformats, (..., 'description'))
         original_description = get_first(video_details, 'shortDescription')
         video_description = (
-            (self._preferred_lang and translated_description)
+            (video_details[0]['description')
             # If original description is blank, it will be an empty string.
             # Do not prefer translated description in this case.
-            or original_description if original_description is not None else translated_description)
+            or original_description if original_description)
         if video_description is None:
             video_description = initial_description
 
