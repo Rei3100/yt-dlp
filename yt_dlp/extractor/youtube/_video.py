@@ -3906,12 +3906,13 @@ class YoutubeIE(YoutubeBaseInfoExtractor):
                 'Other metadata may also be missing')
             video_title = initial_title
 
+        translated_description = self._get_text(microformats, (..., 'description'))
         original_description = get_first(video_details, 'shortDescription')
         video_description = (
-            (video_details[0]['shortDescription']  # primary
+            (self._preferred_lang and translated_description)
             # If original description is blank, it will be an empty string.
             # Do not prefer translated description in this case.
-            or original_description if original_description))
+            or original_description if original_description is not None else translated_description)
         if video_description is None:
             video_description = initial_description
 
