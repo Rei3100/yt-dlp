@@ -4,6 +4,21 @@
 # To create a release, dispatch the https://github.com/yt-dlp/yt-dlp/actions/workflows/release.yml workflow on master
 -->
 
+### 2025.09.29.052117
+
+#### Core changes
+- [Merge branch 'yt-dlp:master' into master](https://github.com/yt-dlp/yt-dlp/commit/83c37d7bf03efdbd0000840cdb625e1b57cb396b) by [pukkandan](https://github.com/pukkandan)
+- [Merge branch 'yt-dlp:master' into master](https://github.com/yt-dlp/yt-dlp/commit/0e0bd15ad94ef37d32fc4ab3de1d8bd3208b0ad2) by [pukkandan](https://github.com/pukkandan)
+- [Update _video.py](https://github.com/yt-dlp/yt-dlp/commit/42f5c8521df4e25a937e41a5f79be9f11196ba75) by [pukkandan](https://github.com/pukkandan)
+- [Update _video.py](https://github.com/yt-dlp/yt-dlp/commit/117ae4ef4218dceb918acda46f49a87655809d5d) by [pukkandan](https://github.com/pukkandan)
+- [Update _video.py](https://github.com/yt-dlp/yt-dlp/commit/fe1e6f97174761dfeb5e49dac4b605cb81f6ab7a) by [pukkandan](https://github.com/pukkandan)
+- [Update _video.py](https://github.com/yt-dlp/yt-dlp/commit/045a8d094dc3eff01d962295101026ddfaeef3a9) by [pukkandan](https://github.com/pukkandan)
+- [Update _video.py](https://github.com/yt-dlp/yt-dlp/commit/286167da5d6639b9bc123714ede7d01dcfd3469e) by [pukkandan](https://github.com/pukkandan)
+- [Update networking.py](https://github.com/yt-dlp/yt-dlp/commit/6a600ce55a91f79663490f057c774c3e69dafcf9) by [pukkandan](https://github.com/pukkandan)
+
+#### Extractor changes
+- **youtube**: [Detect experiment binding GVS PO Token to video id](https://github.com/yt-dlp/yt-dlp/commit/bd5ed90419eea18adfb2f0d8efa9d22b2029119f) ([#14471](https://github.com/yt-dlp/yt-dlp/issues/14471)) by [coletdjnz](https://github.com/coletdjnz)
+
 ### 2025.09.26
 
 #### Extractor changes
