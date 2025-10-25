@@ -4,6 +4,17 @@
 # To create a release, dispatch the https://github.com/yt-dlp/yt-dlp/actions/workflows/release.yml workflow on master
 -->
 
+### 2025.10.25.205525
+
+#### Core changes
+- [Merge branch 'yt-dlp:master' into master](https://github.com/yt-dlp/yt-dlp/commit/29176b318e1e2fd18c7fb7048902e2128aa38216) by [pukkandan](https://github.com/pukkandan)
+- [Merge branch 'yt-dlp:master' into master](https://github.com/yt-dlp/yt-dlp/commit/ed1ae219352d66bb06443672352b988be478868e) by [pukkandan](https://github.com/pukkandan)
+- [Update pillow dependency version to 12.0](https://github.com/yt-dlp/yt-dlp/commit/1c654b02f4d86e50cff973020d81b0fab52e3668) by [pukkandan](https://github.com/pukkandan)
+
+#### Extractor changes
+- **googledrive**: [Rework extractor](https://github.com/yt-dlp/yt-dlp/commit/70f1098312fe53bc85358f7bd624370878b2fa28) ([#14746](https://github.com/yt-dlp/yt-dlp/issues/14746)) by [seproDev](https://github.com/seproDev)
+- **web.archive**: youtube: [Fix extractor](https://github.com/yt-dlp/yt-dlp/commit/d9e3011fd1c3a75871a50e78533afe78ad427ce3) ([#14753](https://github.com/yt-dlp/yt-dlp/issues/14753)) by [seproDev](https://github.com/seproDev)
+
 ### 2025.10.22
 
 #### Important changes
