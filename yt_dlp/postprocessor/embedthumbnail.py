@@ -76,6 +76,7 @@ class EmbedThumbnailPP(FFmpegPostProcessor):
         convertor.fixup_webp(info, idx)
 
         original_thumbnail = thumbnail_filename = info['thumbnails'][idx]['filepath']
+        thumbnail_ext = os.path.splitext(thumbnail_filename)[1][1:]
 
         # サムネイルを正方形に切り出してjpgで保存する.
         from PIL import Image
