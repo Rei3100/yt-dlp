@@ -4,6 +4,16 @@
 # To create a release, dispatch the https://github.com/yt-dlp/yt-dlp/actions/workflows/release.yml workflow on master
 -->
 
+### 2025.12.09.093318
+
+#### Core changes
+- [Add pillow dependency to pyproject.toml](https://github.com/yt-dlp/yt-dlp/commit/c87d7128b527966072a54258b68b5e9ce3995dde) by [pukkandan](https://github.com/pukkandan)
+- [Enhance video title retrieval with translation support](https://github.com/yt-dlp/yt-dlp/commit/eb7ec5a3574228c14c04fcbf24231273249e25b9) by [pukkandan](https://github.com/pukkandan)
+- [Merge branch 'yt-dlp:master' into master](https://github.com/yt-dlp/yt-dlp/commit/4f79e73dc66394481504314de15afc49f8a5382c) by [pukkandan](https://github.com/pukkandan)
+- [Update pyproject.toml](https://github.com/yt-dlp/yt-dlp/commit/9ab8b92f26d10b88c9e1d71f11fb85662ad7e422) by [pukkandan](https://github.com/pukkandan)
+- [Update pyproject.toml](https://github.com/yt-dlp/yt-dlp/commit/de113a017908c1bd4d99156db242582f46f12fd0) by [pukkandan](https://github.com/pukkandan)
+- [Update warning message for missing JS runtime](https://github.com/yt-dlp/yt-dlp/commit/c6138fd7dcdb1f7e28a86f9f4435c57cbde2d488) by [pukkandan](https://github.com/pukkandan)
+
 ### 2025.12.08
 
 #### Core changes
