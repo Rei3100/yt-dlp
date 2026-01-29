@@ -4,6 +4,14 @@
 # To create a release, dispatch the https://github.com/yt-dlp/yt-dlp/actions/workflows/release.yml workflow on master
 -->
 
+### 2026.01.29.215614
+
+#### Core changes
+- [12.1.0](https://github.com/yt-dlp/yt-dlp/commit/e4b538d2c19a98119cfcfc716ac204971f4e9c2e) by [pukkandan](https://github.com/pukkandan)
+- [Merge branch 'yt-dlp:master' into master](https://github.com/yt-dlp/yt-dlp/commit/921daf576dd8628be1e5dc4cbfcb7483cefba80b) by [pukkandan](https://github.com/pukkandan)
+- [Update pyproject.toml](https://github.com/yt-dlp/yt-dlp/commit/052ce3efb6e083da28fab531e86294f0ce01e5c8) by [pukkandan](https://github.com/pukkandan)
+- [Update pyproject.toml](https://github.com/yt-dlp/yt-dlp/commit/421f8ac783906623bebf9d1ef12c508140dd7ee5) by [pukkandan](https://github.com/pukkandan)
+
 ### 2026.01.29
 
 #### Core changes
